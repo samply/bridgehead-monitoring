@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - develop
+      - ci
     tags:
       - 'v*.*.*'
   pull_request:
