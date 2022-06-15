@@ -7,6 +7,8 @@ from blaze import services, SITE_NAME
 from create import createHost
 from icingaAuth import headers
 
+CHECK_INTERVAL = 7200
+
 def checkHost(SITE_NAME):
     
     url = "http://e260-serv-07/v1/objects/hosts?host=BK " + SITE_NAME
@@ -16,7 +18,7 @@ def checkHost(SITE_NAME):
 
         except:
             print(time.ctime() + " icinga not available")
-            time.sleep(60)
+            time.sleep(CHECK_INTERVAL)
             continue
         break 
     return response.status_code
@@ -35,5 +37,5 @@ s = sched.scheduler(time.time, time.sleep)
 while True:
   checkHost(SITE_NAME)
   for service in services:
-    s.enter(60, 1, checkBlaze, (service, ))
+    s.enter(CHECK_INTERVAL, 1, checkBlaze, (service, ))
   s.run()
