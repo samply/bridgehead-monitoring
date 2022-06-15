@@ -1,0 +1,18 @@
+version: "3.9"  # optional since v1.27.0
+services:
+  monitoring:
+    build: .
+    network_mode: "host"
+    container_name: bridgehead-monitoring
+    
+    
+  blaze:
+    image: "samply/blaze:0.17"
+    container_name: bridgehead-ccp-blaze
+    environment:
+      BASE_URL: "http://localhost:8080"
+      JAVA_TOOL_OPTIONS: "-Xmx4g"
+      LOG_LEVEL: "debug"
+      ENFORCE_REFERENTIAL_INTEGRITY: "false"
+    ports: 
+        - "8080:8080"
