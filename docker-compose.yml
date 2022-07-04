@@ -4,6 +4,10 @@ services:
     build: .
     network_mode: "host"
     container_name: bridgehead-monitoring
+    environment: 
+      HOST: ${HOST}
+      SITE_NAME: ${SITE_NAME}
+      PROJECT: ${PROJECT}
     
     
   blaze:

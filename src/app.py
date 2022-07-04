@@ -1,41 +1,46 @@
-import requests
 import time
-from os import environ
-import sched
+from ccp import services, host
+from create import createObj
+from myThread import MyThread
+from check_host import checkHost
 from check_blaze import checkBlaze
-from blaze import services, SITE_NAME
-from create import createHost
-from icingaAuth import headers
+from os import environ
 
-CHECK_INTERVAL = 7200
+def prepare_vars(vars):
+     missingvars = []
+     for var in vars:
+         env = environ.get(var)
+         if env == None:
+             missingvars.append(var)
+         globals()[var] = environ.get(var)
 
-def checkHost(SITE_NAME):
-    
-    url = "http://e260-serv-07/v1/objects/hosts?host=BK " + SITE_NAME
-    while True:
-        try:
-            response = requests.request("GET", url, headers=headers)
+     if(len(missingvars) > 0):
+         raise Exception("Please define variables: %s" % (", ".join(missingvars)) )
 
-        except:
-            print(time.ctime() + " icinga not available")
-            time.sleep(CHECK_INTERVAL)
-            continue
-        break 
-    return response.status_code
+prepare_vars(["PROJECT", "SITE_NAME", "HOST"])
 
+SITE_NAME = environ.get("SITE_NAME")
 
-#check icinga and create host if not exist
-if checkHost(SITE_NAME) == 200:
-  print(time.ctime() + " icinga available") 
+#wait for system to start up
+time.sleep(15)
 
-elif checkHost(SITE_NAME)  == 404:
-  print(time.ctime() + " host not found, create new host: " + SITE_NAME)
-  createHost(SITE_NAME)
+#check first if host exist
+if checkHost(host, SITE_NAME) == 404:
+    print(time.ctime() + " host not found, create new host: " + SITE_NAME)
+    createObj(host, SITE_NAME)
+    for service in services:
+      createObj(service, SITE_NAME)
 
-s = sched.scheduler(time.time, time.sleep)
+for service in services:
+  checkBlaze(service, SITE_NAME)
 
-while True:
-  checkHost(SITE_NAME)
-  for service in services:
-    s.enter(CHECK_INTERVAL, 1, checkBlaze, (service, ))
-  s.run()
+#start host thread
+h = MyThread(host, SITE_NAME)
+h.start()
+
+#start service threads
+for service in services:
+  s = MyThread(service, SITE_NAME)
+  s.start()
+  time.sleep(25)
+
