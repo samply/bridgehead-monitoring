@@ -6,8 +6,3 @@ class Service:
         self.url = url
         self.output = output
         self.checkInterval = checkInterval
-
-class Host:
-    def __init__(self, url, checkInterval):
-        self.url = url 
-        self.checkInterval = checkInterval
