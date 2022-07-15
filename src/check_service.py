@@ -1,7 +1,8 @@
 import requests, json, time
 from ReportToMonitoring import reportToMonitoring
+from vars import SITE_NAME
 
-def checkBlaze(service, SITE_NAME):
+def checkService(service):
     
     payload ={
             "type": "Service",
@@ -17,7 +18,7 @@ def checkBlaze(service, SITE_NAME):
         payload["exit_status"] = 2
         payload["plugin_output"] = "blaze nicht erreichbar"
         print(time.ctime() + " " + service.servicename +  ": blaze nicht erreichbar")
-        reportToMonitoring(json.dumps(payload), service, SITE_NAME)
+        reportToMonitoring(json.dumps(payload), service)
         return
 
     print(time.ctime() + " " + service.servicename +  " status code: %s" % response.status_code)
@@ -25,4 +26,4 @@ def checkBlaze(service, SITE_NAME):
     payload["exit_status"] = 0
     payload["plugin_output"] = eval("response." + service.output)
 
-    reportToMonitoring(json.dumps(payload), service, SITE_NAME)
+    reportToMonitoring(json.dumps(payload), service)

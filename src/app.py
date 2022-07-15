@@ -1,46 +1,46 @@
+import threading
 import time
-from ccp import services, host
+from importlib import import_module 
 from create import createObj
 from myThread import MyThread
 from check_host import checkHost
-from check_blaze import checkBlaze
-from os import environ
+from vars import PROJECT, SITE_NAME
 
-def prepare_vars(vars):
-     missingvars = []
-     for var in vars:
-         env = environ.get(var)
-         if env == None:
-             missingvars.append(var)
-         globals()[var] = environ.get(var)
 
-     if(len(missingvars) > 0):
-         raise Exception("Please define variables: %s" % (", ".join(missingvars)) )
-
-prepare_vars(["PROJECT", "SITE_NAME", "HOST"])
-
-SITE_NAME = environ.get("SITE_NAME")
+services = import_module("projects.%s" % (PROJECT.lower()))
 
 #wait for system to start up
-time.sleep(15)
+time.sleep(20)
 
 #check first if host exist
-if checkHost(host, SITE_NAME) == 404:
+if checkHost() == 404:
     print(time.ctime() + " host not found, create new host: " + SITE_NAME)
-    createObj(host, SITE_NAME)
-    for service in services:
-      createObj(service, SITE_NAME)
+    createObj()
+    for service in services.services:
+      createObj(service)
 
-for service in services:
-  checkBlaze(service, SITE_NAME)
+threads = []
 
 #start host thread
-h = MyThread(host, SITE_NAME)
+h = MyThread()
+h.name = "host-thread"
+threads.append(h)
 h.start()
 
 #start service threads
-for service in services:
-  s = MyThread(service, SITE_NAME)
-  s.start()
-  time.sleep(25)
+for service in services.services:
+    s = MyThread(service)
+    s.name = service.servicename
+    s.start()
+    threads.append(s)
+    time.sleep(25)
 
+while True:
+    for thread in threads:
+        if not thread.is_alive():
+            for t in threads: 
+                t.stop()
+            raise SystemExit(time.ctime() + " " + thread.name + " an error occured here.")        
+        time.sleep(600)
+    
+            

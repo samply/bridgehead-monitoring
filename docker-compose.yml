@@ -8,6 +8,9 @@ services:
       HOST: ${HOST}
       SITE_NAME: ${SITE_NAME}
       PROJECT: ${PROJECT}
+      SERVER_URL: ${SERVER_URL}
+        
+    restart: always
     
     
   blaze:
