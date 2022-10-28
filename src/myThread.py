@@ -13,20 +13,13 @@ class MyThread(Thread):
         self.comp = comp
 
     def run(self):
-        if isinstance(self.comp, Service):
-            self.service_thread()
-        else:
-            self.host_thread()
-
-    def host_thread(self):
         while not self.stopped.isSet():
-            checkHost()
-            self.stopped.wait(HOST_CHECKINTERVAL)
+            if isinstance(self.comp, Service):
+                checkService(self.comp)
+                self.stopped.wait(self.comp.checkInterval)
+            else:
+                checkHost()
+                self.stopped.wait(HOST_CHECKINTERVAL)
 
-    def service_thread(self):
-        while not self.stopped.isSet():
-            checkService(self.comp)
-            self.stopped.wait(self.comp.checkInterval)
-        
     def stop(self):
         self.stopped.set()

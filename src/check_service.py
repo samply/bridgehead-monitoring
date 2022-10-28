@@ -1,14 +1,14 @@
 import requests, json, time
-from ReportToMonitoring import reportToMonitoring
+from report_to_monitoring import reportToMonitoring
 from vars import SITE_NAME
+from status_code import statusCode
+from report_to_beam_proxy import reportToBeamProxy
 
 def checkService(service):
     
     payload ={
             "type": "Service",
             "filter": "host.name==\"BK " + SITE_NAME + "\" && service.name==\"" + service.servicename + "\""
-            #"exit_status": 2,
-            #"plugin_output": "blaze nicht erreichbar"
         }
     headers = {}
     try:
@@ -16,14 +16,20 @@ def checkService(service):
 
     except:
         payload["exit_status"] = 2
-        payload["plugin_output"] = "blaze nicht erreichbar"
-        print(time.ctime() + " " + service.servicename +  ": blaze nicht erreichbar")
+        payload["plugin_output"] = "Could not send request / Error: connect ECONNREFUSED"
+        print(time.ctime() + " " + service.servicename + ": Could not send request / Error: connect ECONNREFUSED")
         reportToMonitoring(json.dumps(payload), service)
         return
 
-    print(time.ctime() + " " + service.servicename +  " status code: %s" % response.status_code)
+    print(time.ctime() + " " + service.servicename +  ": " + statusCode(response.status_code))
 
-    payload["exit_status"] = 0
-    payload["plugin_output"] = eval("response." + service.output)
+    if response.status_code == 200:
+        payload["exit_status"] = 0
+        payload["plugin_output"] = eval("response." + service.output)
 
-    reportToMonitoring(json.dumps(payload), service)
+    elif response.status_code != 200:
+        payload["exit_status"] = 2
+        payload["plugin_output"] = statusCode(response.status_code)
+
+    reportToBeamProxy(json.dumps(payload))
+    #reportToMonitoring(json.dumps(payload), service)

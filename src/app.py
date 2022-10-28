@@ -1,24 +1,28 @@
-import threading
 import time
 from importlib import import_module 
-from create import createObj
 from myThread import MyThread
+from vars import PROJECT
+from compare_services import compareServices
+from report_to_monitoring import reportToMonitoring
 from check_host import checkHost
-from vars import PROJECT, SITE_NAME
+from check_service import checkService
+# if schalter = monitorig dann folgendes 
+# wenn nicht dann auf beam proxy hören wenn was kommt dann report_to_monitoring
+
+#if SWITCH = True:
+
+    #get beam proxy infos über API
+    #reportToMonitoring(payload,"")
 
 
 services = import_module("projects.%s" % (PROJECT.lower()))
 
 #wait for system to start up
-time.sleep(20)
+time.sleep(2)
+checkHost()
 
-#check first if host exist
-if checkHost() == 404:
-    print(time.ctime() + " host not found, create new host: " + SITE_NAME)
-    createObj()
-    for service in services.services:
-      createObj(service)
-
+for service in services.services:
+    checkService(service)
 threads = []
 
 #start host thread
@@ -26,6 +30,11 @@ h = MyThread()
 h.name = "host-thread"
 threads.append(h)
 h.start()
+
+time.sleep(5)
+
+#check if services were deleted
+compareServices(services)
 
 #start service threads
 for service in services.services:
@@ -40,7 +49,7 @@ while True:
         if not thread.is_alive():
             for t in threads: 
                 t.stop()
-            raise SystemExit(time.ctime() + " " + thread.name + " an error occured here.")        
-        time.sleep(600)
+            raise SystemExit(time.ctime() + " " + thread.name + " an error occured here.")
+    time.sleep(600)
     
             

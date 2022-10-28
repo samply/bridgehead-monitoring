@@ -13,6 +13,7 @@ def prepare_vars(vars):
 
 prepare_vars(["PROJECT", "SITE_NAME", "HOST", "SERVER_URL"])
 
+# system environment variables
 SITE_NAME = environ.get("SITE_NAME")
 
 PROJECT = environ.get("PROJECT")
@@ -21,4 +22,13 @@ HOST = environ.get("HOST")
 
 SERVER_URL = environ.get("SERVER_URL")
 
+BEAM_URL = "http://localhost:8082" # environ.get("BEAM_URL")
+
 HOST_CHECKINTERVAL = 540
+
+# icinga settings
+
+HOST_TEMPLATE = "bridgetest"
+
+SERVICE_TEMPLATE = "bridgehead-service-daily"
+
