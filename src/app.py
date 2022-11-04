@@ -2,27 +2,16 @@ import time
 from importlib import import_module 
 from myThread import MyThread
 from vars import PROJECT
-from compare_services import compareServices
-from report_to_monitoring import reportToMonitoring
-from check_host import checkHost
+from report_to_beam_proxy import reportToBeamProxy
 from check_service import checkService
-# if schalter = monitorig dann folgendes 
-# wenn nicht dann auf beam proxy hören wenn was kommt dann report_to_monitoring
-
-#if SWITCH = True:
-
-    #get beam proxy infos über API
-    #reportToMonitoring(payload,"")
-
 
 services = import_module("projects.%s" % (PROJECT.lower()))
 
 #wait for system to start up
 time.sleep(2)
-checkHost()
 
-for service in services.services:
-    checkService(service)
+#for service in services.services:
+#    checkService(service)
 threads = []
 
 #start host thread
@@ -34,7 +23,7 @@ h.start()
 time.sleep(5)
 
 #check if services were deleted
-compareServices(services)
+#compareServices(services)
 
 #start service threads
 for service in services.services:

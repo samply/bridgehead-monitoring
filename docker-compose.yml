@@ -1,17 +1,16 @@
 version: "3.9"  # optional since v1.27.0
 services:
   monitoring:
-    build: .
+    image: "uff"
     network_mode: "host"
     container_name: bridgehead-monitoring
     environment: 
       HOST: ${HOST}
       SITE_NAME: ${SITE_NAME}
       PROJECT: ${PROJECT}
-      SERVER_URL: ${SERVER_URL}
-        
-    restart: always
-    
+      BEAM_URL: ${BEAM_URL}
+      PROXY_ID: ${PROXY_ID}
+      KEY: ${KEY}
     
   blaze:
     image: "samply/blaze:0.17"

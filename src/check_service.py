@@ -1,5 +1,4 @@
 import requests, json, time
-from report_to_monitoring import reportToMonitoring
 from vars import SITE_NAME
 from status_code import statusCode
 from report_to_beam_proxy import reportToBeamProxy
@@ -18,7 +17,7 @@ def checkService(service):
         payload["exit_status"] = 2
         payload["plugin_output"] = "Could not send request / Error: connect ECONNREFUSED"
         print(time.ctime() + " " + service.servicename + ": Could not send request / Error: connect ECONNREFUSED")
-        reportToMonitoring(json.dumps(payload), service)
+        reportToBeamProxy(json.dumps(payload))
         return
 
     print(time.ctime() + " " + service.servicename +  ": " + statusCode(response.status_code))

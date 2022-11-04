@@ -11,7 +11,7 @@ def prepare_vars(vars):
      if(len(missingvars) > 0):
          raise Exception("Please define variables: %s" % (", ".join(missingvars)) )
 
-prepare_vars(["PROJECT", "SITE_NAME", "HOST", "SERVER_URL"])
+prepare_vars(["PROJECT", "SITE_NAME", "HOST", "BEAM_URL", "PROXY_ID", "KEY"])
 
 # system environment variables
 SITE_NAME = environ.get("SITE_NAME")
@@ -20,9 +20,12 @@ PROJECT = environ.get("PROJECT")
 
 HOST = environ.get("HOST")
 
-SERVER_URL = environ.get("SERVER_URL")
+BEAM_URL = environ.get("BEAM_URL")
 
-BEAM_URL = "http://localhost:8082" # environ.get("BEAM_URL")
+PROXY_ID = environ.get("PROXY_ID")
+
+KEY = environ.get("KEY")
+
 
 HOST_CHECKINTERVAL = 540
 
