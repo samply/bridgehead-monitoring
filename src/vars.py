@@ -26,6 +26,8 @@ PROXY_ID = environ.get("PROXY_ID")
 
 KEY = environ.get("KEY")
 
+MONITORING_TARGET = environ.get("MONITORING_TARGET")
+
 
 HOST_CHECKINTERVAL = 540
 

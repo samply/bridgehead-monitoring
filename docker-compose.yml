@@ -10,15 +10,6 @@ services:
       PROJECT: ${PROJECT}
       BEAM_URL: ${BEAM_URL}
       PROXY_ID: ${PROXY_ID}
+      MONITORING_TARGET: ${MONITORING_TARGET}
       KEY: ${KEY}
     
-  blaze:
-    image: "samply/blaze:0.17"
-    container_name: bridgehead-ccp-blaze
-    environment:
-      BASE_URL: "http://localhost:8080"
-      JAVA_TOOL_OPTIONS: "-Xmx4g"
-      LOG_LEVEL: "debug"
-      ENFORCE_REFERENTIAL_INTEGRITY: "false"
-    ports: 
-        - "8080:8080"
