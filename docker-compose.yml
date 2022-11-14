@@ -1,8 +1,7 @@
-version: "3.9"  # optional since v1.27.0
+version: "3.9"
 services:
   monitoring:
-    image: "uff"
-    network_mode: "host"
+    image: "samply/bridgehead-monitoring:main"
     container_name: bridgehead-monitoring
     environment: 
       HOST: ${HOST}
