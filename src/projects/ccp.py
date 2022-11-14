@@ -5,7 +5,6 @@ blaze = import_module("projects.components.blaze")
 
 services = []
 
-#adress = "http://bridgehead-ccp-blaze:8080"
 adress = "http://bridgehead-ccp-blaze:8080"
 
 services += blaze.services

@@ -31,4 +31,3 @@ def checkService(service):
         payload["plugin_output"] = statusCode(response.status_code)
 
     reportToBeamProxy(json.dumps(payload))
-    #reportToMonitoring(json.dumps(payload), service)
