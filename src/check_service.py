@@ -15,8 +15,8 @@ def checkService(service):
         response = requests.request("GET", service.url, headers=headers)
 
     except:
-        payload["output_code"] = response.status_code
-        payload["output_text"] = response.text
+        payload["output_code"] = 503
+        payload["output_text"] = "Service Unavailable"
         print(time.ctime() + " " + service.servicename + "(400): Could not send request / Error: connect ECONNREFUSED")
         reportToBeamProxy(json.dumps(payload))
         return
