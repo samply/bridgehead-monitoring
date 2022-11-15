@@ -10,8 +10,6 @@ services = import_module("projects.%s" % (PROJECT.lower()))
 #wait for system to start up
 time.sleep(2)
 
-#for service in services.services:
-#    checkService(service)
 threads = []
 
 #start host thread
