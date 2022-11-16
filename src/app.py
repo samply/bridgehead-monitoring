@@ -6,9 +6,11 @@ from report_to_beam_proxy import reportToBeamProxy
 from check_service import checkService
 
 services = import_module("projects.%s" % (PROJECT.lower()))
+print(time.ctime() + " Loaded Project " + PROJECT)
 
-#wait for system to start up
-time.sleep(2)
+time.sleep(25)
+
+print(time.ctime() + " Starting Monitoring")
 
 threads = []
 
@@ -18,18 +20,12 @@ h.name = "host-thread"
 threads.append(h)
 h.start()
 
-time.sleep(5)
-
-#check if services were deleted
-#compareServices(services)
-
 #start service threads
 for service in services.services:
     s = MyThread(service)
     s.name = service.servicename
     s.start()
     threads.append(s)
-    time.sleep(25)
 
 while True:
     for thread in threads:

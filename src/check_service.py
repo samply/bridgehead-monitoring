@@ -1,16 +1,19 @@
 import requests, json, time
 from vars import SITE_NAME
-from status_code import statusCode
 from report_to_beam_proxy import reportToBeamProxy
 
 def checkService(service):
     
+    print(time.ctime() + ": Checking Service " + service.url)
+
     payload ={
             "type": "Service",
             "hostname": SITE_NAME,
             "servicename": service.servicename,
         }
-    headers = {}
+    headers = {
+        "Content-Type": "application/json"
+            }
     try:
         response = requests.request("GET", service.url, headers=headers)
 
@@ -21,7 +24,7 @@ def checkService(service):
         reportToBeamProxy(json.dumps(payload))
         return
 
-    print(time.ctime() + " " + service.servicename +  ": " + statusCode(response.status_code))
+    print(time.ctime() + " " + service.servicename +  ": " + str(response.status_code))
 
     payload["output_code"] = response.status_code
     payload["output_text"] = response.text

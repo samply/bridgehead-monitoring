@@ -1,7 +1,6 @@
 from wsgiref import headers
 import requests, time
 from vars import BEAM_URL, PROXY_ID, KEY, MONITORING_TARGET
-from status_code import statusCode
 import uuid
 import json 
 import base64
@@ -45,4 +44,4 @@ def reportToBeamProxy(payload):
         raise SystemExit(time.ctime() + " error in reportToBeamProxy: not available")
     
     if response.status_code != 200:
-        print(time.ctime() + " " + statusCode(response.status_code))
+        print(time.ctime() + " " + str(response.status_code))

@@ -1,11 +1,9 @@
-import sys, pathlib
+import time
 from importlib import import_module
 
 blaze = import_module("projects.components.blaze")
 
 services = []
-
-adress = "http://bridgehead-ccp-blaze:8080"
 
 services += blaze.services
 
@@ -14,6 +12,8 @@ for service in services:
         adress = "http://bridgehead-ccp-blaze:8080"
 
     service.url = adress + service.url
+    print(time.ctime() + " Monitoring: " + service.url )
+
 
 
 
