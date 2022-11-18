@@ -24,9 +24,9 @@ def checkService(service):
         reportToBeamProxy(json.dumps(payload))
         return
 
-    print(time.ctime() + " " + service.servicename +  ": " + str(response.status_code))
-
     payload["output_code"] = response.status_code
-    payload["output_text"] = response.text
+    payload["output_text"] = eval("response." + service.output)
+
+    print(time.ctime() + " " + service.servicename + " - " + str(response.status_code) + " - " +  str(payload["output_text"]))
 
     reportToBeamProxy(json.dumps(payload))

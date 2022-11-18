@@ -6,7 +6,6 @@ import json
 import base64
 
 def reportToBeamProxy(payload):
-    print("Sending Info")
 
     url = BEAM_URL + "/v1/tasks"
     auth = "ApiKey " + PROXY_ID + " " + KEY
@@ -36,12 +35,9 @@ def reportToBeamProxy(payload):
     json_data=json.dumps(body)
 
     try:
-        print("Start posting")
         response = requests.request("POST", url, headers=headers, data=json_data)
         
         # wenn status code != 200 dann Fehler
-    except:
-        raise SystemExit(time.ctime() + " error in reportToBeamProxy: not available")
+    except Exception as e:
+        raise SystemExit(time.ctime() + " Error: " + str(e))
     
-    if response.status_code != 200:
-        print(time.ctime() + " " + str(response.status_code))
