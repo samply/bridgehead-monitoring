@@ -1,11 +1,15 @@
-FROM python:3-slim
+# This assumes binaries are present, see COPY directive.
 
-WORKDIR /usr/src/app
+ARG IMGNAME=gcr.io/distroless/cc
 
-RUN pip install requests
-RUN pip install colorlog
+FROM alpine AS chmodder
+ARG FEATURE
+ARG TARGETARCH
+COPY /artifacts/binaries-$TARGETARCH/bridgehead-monitoring /app/
+RUN chmod +x /app/*
 
-# See exact list of files in .dockerignore
-ADD src/ /usr/src/app/
+FROM ${IMGNAME}
+ARG TARGETARCH
+COPY --from=chmodder /app/* /usr/local/bin/
+ENTRYPOINT [ "/usr/local/bin/bridgehead-monitoring" ]
 
-CMD ["python", "-u", "app.py"]
