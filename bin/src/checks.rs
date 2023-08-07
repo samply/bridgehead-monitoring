@@ -24,7 +24,7 @@ impl CheckExecutor for Check {
             Check::BlazeResources => {
                 match CLIENT.get("http://bridgehead-ccp-blaze:8080/fhir").send().await {
                     Ok(res) => {
-                        let json = &res.json::<Value>().await.unwrap()["total"];
+                        let json = &res.json::<Value>().await.unwrap_or(Value::Null)["total"];
                         serde_json::to_string(json).unwrap_or_else(|e| e.to_string())
                     },
                     Err(e) => e.to_string()
