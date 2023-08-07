@@ -1,9 +1,10 @@
 use std::time::Duration;
 
 use beam_lib::{MsgId, TaskRequest, TaskResult, WorkStatus, AppId};
+use checks::CheckExecutor;
 use clap::Parser;
 use config::Config;
-use checks::Check;
+use monitoring_lib::Check;
 use futures::future::join_all;
 use once_cell::sync::Lazy;
 use reqwest::{Client, StatusCode, header::{HeaderMap, AUTHORIZATION, HeaderValue, ACCEPT}};
@@ -18,7 +19,7 @@ async fn main() {
         let Some((checks, task_id, sender)) = poll_checks().await else {
             break;
         };
-        let results = join_all(checks.iter().map(Check::execute)).await;
+        let results = join_all(checks.iter().map(CheckExecutor::execute)).await;
         send_results(results, task_id, sender).await;
     }
 }

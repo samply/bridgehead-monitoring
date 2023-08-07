@@ -1,16 +1,17 @@
+use async_trait::async_trait;
+use monitoring_lib::Check;
 use serde_json::Value;
 
 use crate::CLIENT;
 
-#[derive(serde::Serialize, serde::Deserialize)]
-pub enum Check {
-    BlazeHealth,
-    BlazeVersion,
-    BlazeResources,
+#[async_trait]
+pub trait CheckExecutor {
+    async fn execute(&self) -> String;
 }
 
-impl Check {
-    pub async fn execute(&self) -> String {
+#[async_trait]
+impl CheckExecutor for Check {
+    async fn execute(&self) -> String {
         match self {
             Check::BlazeHealth => {
                 match CLIENT.get("http://bridgehead-ccp-blaze:8080/health").send().await {

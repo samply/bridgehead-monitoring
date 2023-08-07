@@ -1,0 +1,17 @@
+[package]
+name = "bridgehead-monitoring"
+version = "0.1.0"
+edition = "2021"
+license = "Apache-2.0"
+
+[dependencies]
+serde = { version = "1", features = ["derive"]}
+reqwest = { version = "0.11", features = ["json"] }
+tokio = { version = "1", features = ["full"] }
+beam-lib = { git = "https://github.com/samply/beam", branch = "develop" }
+clap = { version = "4.3", features = ["env", "derive"] }
+futures = { version = "0.3" }
+once_cell = { version = "1" }
+serde_json = { version = "1" }
+async-trait = { version = "0.1" }
+monitoring-lib = { path = "../lib" }
