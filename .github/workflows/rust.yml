@@ -78,7 +78,7 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:
-          name: binaries-${{ matrix.arch }}-${{ matrix.features }}
+          name: binaries-${{ matrix.arch }}
           path: |
             target/${{ env.rustarch }}/${{ env.PROFILE }}/bridgehead-monitoring
 
