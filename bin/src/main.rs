@@ -46,8 +46,12 @@ async fn poll_checks() -> Option<(Vec<Check>, MsgId, AppId)> {
 
         return match resp.status() {
             StatusCode::OK | StatusCode::PARTIAL_CONTENT => {
-                match resp.json::<TaskRequest<Vec<Check>>>().await {
-                    Ok(TaskRequest { id, body, from, .. }) => Some((body, id, from)),
+                match resp.json::<Vec<TaskRequest<Vec<Check>>>>().await.as_mut().map(Vec::pop) {
+                    Ok(Some(TaskRequest { id, body, from, .. })) => Some((body, id, from)),
+                    Ok(None) => {
+                        eprintln!("Got 0 Tasks");
+                        continue
+                    },
                     Err(e) => {
                         eprintln!("Failed to get response json: {e}");
                         tokio::time::sleep(RETRY_INTERVAL).await;
