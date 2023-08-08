@@ -12,9 +12,11 @@ use serde_json::Value;
 
 mod config;
 mod checks;
+mod shutdown;
 
 #[tokio::main]
 async fn main() {
+    tokio::spawn(shutdown::wait_for_shutdown_signal());
     loop {
         let Some((checks, task_id, sender)) = poll_checks().await else {
             break;
