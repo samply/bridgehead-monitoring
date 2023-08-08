@@ -17,5 +17,9 @@ pub struct Config {
     #[clap(long, env, default_value="http://bridgehead-beam-proxy")]
     /// Beam proxy url
     pub beam_proxy: Url,
+
+    #[clap(long, env, default_value="http://bridgehead-ccp-blaze")]
+    /// Blaze base url
+    pub blaze_url: Url,
 }
 
