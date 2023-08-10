@@ -4,9 +4,9 @@ A small monitoring service written in Rust. The tool checks local bridgehead com
 
 ## Usage
 
+```
 bridgehead-monitoring [OPTIONS] --beam-id <BEAM_ID> --beam-api-key <BEAM_API_KEY>
 
-```
 Options:
       --beam-id <BEAM_ID>            Beam id for the application [env: BEAM_ID=]
       --beam-api-key <BEAM_API_KEY>  Beam secret for the application [env: BEAM_API_KEY=]
@@ -21,8 +21,8 @@ The configuration options can all be set via enviroment variables as seen in [us
 
 Example:
 ```yml
-  bridgehead-monitorer:
-    image: samply/bridgehead-monitoring:rust-rewrite
+  bridgehead-monitoring:
+    image: samply/bridgehead-monitoring:latest
     environment:
       - BEAM_ID=monitoring.${PROXY_ID}
       - BEAM_API_KEY=${BEAM_APP_SECRET}
