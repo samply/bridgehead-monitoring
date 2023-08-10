@@ -8,11 +8,11 @@ bridgehead-monitoring [OPTIONS] --beam-id <BEAM_ID> --beam-api-key <BEAM_API_KEY
 
 ```
 Options:
-      --beam-id <BEAM_ID>            Beam id for the application [env: BEAM_ID=]
-      --beam-api-key <BEAM_API_KEY>  Beam secret for the application [env: BEAM_API_KEY=]
-      --beam-proxy <BEAM_PROXY>      Beam proxy url [env: BEAM_PROXY=] [default: http://beam-proxy]
-      --blaze-url <BLAZE_URL>        Blaze base url [env: BLAZE_URL=] [default: http://blaze]
-  -h, --help                         Print help
+      --beam-id <BEAM_ID>                Beam id for the application [env: BEAM_ID=]
+      --beam-api-key <BEAM_API_KEY>      Beam secret for the application [env: BEAM_API_KEY=]
+      --beam-proxy-url <BEAM_PROXY_URL>  Beam proxy url [env: BEAM_PROXY_URL=] [default: http://beam-proxy:8081]
+      --blaze-url <BLAZE_URL>            Blaze base url [env: BLAZE_URL=] [default: http://blaze:8080]
+  -h, --help                             Print help
 ```
 
 ## Docker usage
