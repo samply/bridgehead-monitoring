@@ -14,11 +14,11 @@ pub struct Config {
     /// Beam secret for the application
     pub beam_api_key: String,
 
-    #[clap(long, env, default_value="http://beam-proxy")]
+    #[clap(long, env, default_value="http://beam-proxy:8081")]
     /// Beam proxy url
     pub beam_proxy: Url,
 
-    #[clap(long, env, default_value="http://blaze")]
+    #[clap(long, env, default_value="http://blaze:8080")]
     /// Blaze base url
     pub blaze_url: Url,
 }
