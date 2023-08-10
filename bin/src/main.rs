@@ -14,6 +14,18 @@ mod config;
 mod checks;
 mod shutdown;
 
+static CONFIG: Lazy<Config> = Lazy::new(|| Config::parse());
+
+static CLIENT: Lazy<Client> = Lazy::new(|| {
+    let mut header_map = HeaderMap::new();
+    header_map.insert(AUTHORIZATION, HeaderValue::from_bytes(format!("ApiKey {} {}", CONFIG.beam_id, CONFIG.beam_api_key).as_bytes()).unwrap());
+    header_map.insert(ACCEPT, HeaderValue::from_static("application/json"));
+    reqwest::Client::builder().default_headers(header_map).build().unwrap()
+});
+
+const RETRY_INTERVAL: Duration = Duration::from_secs(60);
+const MAX_RETRYS: usize = 100;
+
 #[tokio::main]
 async fn main() {
     tokio::spawn(shutdown::wait_for_shutdown_signal());
@@ -25,9 +37,6 @@ async fn main() {
         send_results(results, task_id, sender).await;
     }
 }
-
-const RETRY_INTERVAL: Duration = Duration::from_secs(60);
-const MAX_RETRYS: usize = 100;
 
 async fn poll_checks() -> Option<(Vec<Check>, MsgId, AppId)> {
     static URL: Lazy<String> = Lazy::new(|| {
@@ -94,12 +103,3 @@ async fn send_results(results: Vec<String>, task_id: MsgId, sender: AppId) {
         },
     };
 }
-
-static CONFIG: Lazy<Config> = Lazy::new(|| Config::parse());
-
-static CLIENT: Lazy<Client> = Lazy::new(|| {
-    let mut header_map = HeaderMap::new();
-    header_map.insert(AUTHORIZATION, HeaderValue::from_bytes(format!("ApiKey {} {}", CONFIG.beam_id, CONFIG.beam_api_key).as_bytes()).unwrap());
-    header_map.insert(ACCEPT, HeaderValue::from_static("application/json"));
-    reqwest::Client::builder().default_headers(header_map).build().unwrap()
-});
