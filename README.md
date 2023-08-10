@@ -1,20 +1,33 @@
-# bridgehead-monitoring
-A small monitoring service for your local bridgehead. It checks local components and transmit the status to a central monitoring service.
+# Bridgehead-monitoring
+
+A small monitoring service written in Rust. The tool checks local bridgehead components and reports the status to a central monitoring service.
 
 ## Usage
 
-To run with docker-compose
+bridgehead-monitoring [OPTIONS] --beam-id <BEAM_ID> --beam-api-key <BEAM_API_KEY>
 
-```docker-compose up```
+```
+Options:
+      --beam-id <BEAM_ID>            Beam id for the application [env: BEAM_ID=]
+      --beam-api-key <BEAM_API_KEY>  Beam secret for the application [env: BEAM_API_KEY=]
+      --beam-proxy <BEAM_PROXY>      Beam proxy url [env: BEAM_PROXY=] [default: http://beam-proxy]
+      --blaze-url <BLAZE_URL>        Blaze base url [env: BLAZE_URL=] [default: http://blaze]
+  -h, --help                         Print help
+```
 
-### Environment Varibales
+## Docker usage
 
-| Var |  Value |
-|---|---|
-| HOST  |  Hostname of the system |
-| SITE_NAME  |  The full name of our site  |
-| PROJECT  | Specifies the project. Currently we only support ccp/bbmri  |
-| PROXY_ID  |  Your beam proxy.id with full broker url |
-| MONITORING_TARGET  |  Specifies the target monitoring services provided by the project |
-| KEY  |  API key for communication with the beam proxy  |
-| BEAM_URL  |  Specifies the beam proxy URL |
+The configuration options can all be set via enviroment variables as seen in [usage](#usage).
+
+Example:
+```yml
+  bridgehead-monitorer:
+    image: samply/bridgehead-monitoring:rust-rewrite
+    environment:
+      - BEAM_ID=monitoring.${PROXY_ID}
+      - BEAM_API_KEY=${BEAM_APP_SECRET}
+      - BEAM_PROXY=http://beam-proxy
+    depends_on:
+      - beam-proxy
+```
+
