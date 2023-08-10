@@ -40,7 +40,7 @@ async fn main() {
 
 async fn poll_checks() -> Option<(Vec<Check>, MsgId, AppId)> {
     static URL: Lazy<String> = Lazy::new(|| {
-        let mut url = CONFIG.beam_proxy.join("/v1/tasks").unwrap();
+        let mut url = CONFIG.beam_proxy_url.join("/v1/tasks").unwrap();
         url.set_query(Some("wait_count=1&filter=todo"));
         url.to_string()
     });
@@ -82,7 +82,7 @@ async fn poll_checks() -> Option<(Vec<Check>, MsgId, AppId)> {
 }
 
 async fn send_results(results: Vec<String>, task_id: MsgId, sender: AppId) {
-    let url = CONFIG.beam_proxy.join(&format!("/v1/tasks/{task_id}/results/{}", CONFIG.beam_id)).unwrap();
+    let url = CONFIG.beam_proxy_url.join(&format!("/v1/tasks/{task_id}/results/{}", CONFIG.beam_id)).unwrap();
     
     let resp = CLIENT.put(url).json(&TaskResult {
         from: CONFIG.beam_id.clone(),

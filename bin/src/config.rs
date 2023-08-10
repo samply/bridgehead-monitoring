@@ -16,7 +16,7 @@ pub struct Config {
 
     #[clap(long, env, default_value="http://beam-proxy:8081")]
     /// Beam proxy url
-    pub beam_proxy: Url,
+    pub beam_proxy_url: Url,
 
     #[clap(long, env, default_value="http://blaze:8080")]
     /// Blaze base url
