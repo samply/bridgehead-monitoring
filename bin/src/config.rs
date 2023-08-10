@@ -14,11 +14,11 @@ pub struct Config {
     /// Beam secret for the application
     pub beam_api_key: String,
 
-    #[clap(long, env, default_value="http://bridgehead-beam-proxy")]
+    #[clap(long, env, default_value="http://beam-proxy")]
     /// Beam proxy url
     pub beam_proxy: Url,
 
-    #[clap(long, env, default_value="http://bridgehead-ccp-blaze")]
+    #[clap(long, env, default_value="http://blaze")]
     /// Blaze base url
     pub blaze_url: Url,
 }
