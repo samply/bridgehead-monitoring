@@ -14,4 +14,4 @@ futures = { version = "0.3" }
 once_cell = { version = "1" }
 serde_json = { version = "1" }
 async-trait = { version = "0.1" }
-monitoring-lib = { path = "../lib" }
+bridgehead-monitoring-lib = { path = "../lib" }

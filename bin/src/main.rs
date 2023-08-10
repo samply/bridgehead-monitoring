@@ -4,7 +4,7 @@ use beam_lib::{MsgId, TaskRequest, TaskResult, WorkStatus, AppId};
 use checks::CheckExecutor;
 use clap::Parser;
 use config::Config;
-use monitoring_lib::Check;
+use bridgehead_monitoring_lib::Check;
 use futures::future::join_all;
 use once_cell::sync::Lazy;
 use reqwest::{Client, StatusCode, header::{HeaderMap, AUTHORIZATION, HeaderValue, ACCEPT}};

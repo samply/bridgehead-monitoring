@@ -1,5 +1,5 @@
 use async_trait::async_trait;
-use monitoring_lib::Check;
+use bridgehead_monitoring_lib::Check;
 use serde_json::Value;
 
 use crate::{CLIENT, CONFIG};
