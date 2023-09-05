@@ -26,7 +26,7 @@ Example:
     environment:
       - BEAM_ID=monitoring.${PROXY_ID}
       - BEAM_API_KEY=${BEAM_APP_SECRET}
-      - BEAM_PROXY=http://beam-proxy
+      - BEAM_PROXY_URL=http://beam-proxy
     depends_on:
       - beam-proxy
 ```
