@@ -5,7 +5,7 @@ use checks::CheckExecutor;
 use clap::Parser;
 use config::Config;
 use bridgehead_monitoring_lib::{Check, CheckResult};
-use futures::{future::join_all, SinkExt, FutureExt};
+use futures::{future::join_all, FutureExt};
 use once_cell::sync::Lazy;
 use reqwest::{Client, StatusCode, header::{HeaderMap, AUTHORIZATION, HeaderValue, ACCEPT}};
 use serde_json::Value;
