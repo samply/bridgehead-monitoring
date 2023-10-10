@@ -4,8 +4,8 @@ use beam_lib::{MsgId, TaskRequest, TaskResult, WorkStatus, AppId};
 use checks::CheckExecutor;
 use clap::Parser;
 use config::Config;
-use bridgehead_monitoring_lib::Check;
-use futures::future::join_all;
+use bridgehead_monitoring_lib::{Check, CheckResult};
+use futures::{future::join_all, SinkExt, FutureExt};
 use once_cell::sync::Lazy;
 use reqwest::{Client, StatusCode, header::{HeaderMap, AUTHORIZATION, HeaderValue, ACCEPT}};
 use serde_json::Value;
@@ -33,7 +33,11 @@ async fn main() {
         let Some((checks, task_id, sender)) = poll_checks().await else {
             break;
         };
-        let results = join_all(checks.iter().map(CheckExecutor::execute)).await;
+        let results = join_all(checks
+            .iter()
+            .map(CheckExecutor::execute)
+            .map(|f| f.map(|res| res.unwrap_or_else(|e| e))))
+            .await;
         send_results(results, task_id, sender).await;
     }
 }
@@ -81,7 +85,7 @@ async fn poll_checks() -> Option<(Vec<Check>, MsgId, AppId)> {
     None
 }
 
-async fn send_results(results: Vec<String>, task_id: MsgId, sender: AppId) {
+async fn send_results(results: Vec<CheckResult>, task_id: MsgId, sender: AppId) {
     let url = CONFIG.beam_proxy_url.join(&format!("/v1/tasks/{task_id}/results/{}", CONFIG.beam_id)).unwrap();
     
     let resp = CLIENT.put(url).json(&TaskResult {
